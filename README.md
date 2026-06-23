@@ -56,6 +56,3 @@ Para potenciar la sostenibilidad ecológica de código abierto de este repositor
 
 ---
 
-## 📄 Licencia
-
-Este hub se distribuye bajo la licencia **MIT**. ¡Siéntete libre de utilizar cualquiera de las configuraciones visuales o interactividades en tus portafolios personales!

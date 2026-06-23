@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   },
   // Allow access to remote image placeholder.
   images: {
+    unoptimized: process.env.EXPORT_STATIC === 'true' ? true : undefined,
     remotePatterns: [
       {
         protocol: 'https',
@@ -19,7 +20,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  output: 'standalone',
+  output: process.env.EXPORT_STATIC === 'true' ? 'export' : 'standalone',
   transpilePackages: ['motion'],
   webpack: (config, {dev}) => {
     // HMR is disabled in AI Studio via DISABLE_HMR env var.

@@ -10,22 +10,28 @@ Es ideal para aplicaciones web (**Next.js**, **React**, **Vite**), ya que es **1
 
 *   **Kotlin-Style DSL:** Define esquemas de tablas e inicializa tu base de datos mediante bloques funcionales encadenados y descriptivos.
 *   **Seguridad SSR (Next.js Friendly):** No rompe tu compilación en el servidor. Cuenta con un sistema interno con detección inteligente de entornos (`window` y `localStorage` condicionales).
+*   **Cifrado Síncrono Ultrarrápido:** Protege datos en almacenamiento local mediante algoritmos simétricos por bloques síncronos sin recurrir a promesas que rompan el renderizado de componentes.
+*   **Integridad Referencial Real:** Restricciones de claves foráneas con soporte para acciones relacionales (`CASCADE`, `RESTRICT` y `SET_NULL`) ejecutadas en caliente.
+*   **Sincronización y Backups Avanzados:** Exportador/importador JSON de estado atómico con soporte de transacciones y mezcla inteligente de datos (`merge` / Upsert).
 *   **Validación de Esquema Estricta:** Comprobación en tiempo real de tipos de datos (`INTEGER`, `REAL`, `TEXT`, `BOOLEAN`, `DATETIME`).
 *   **Manejo de Restricciones (Constraints):** Detección nativa de claves primarias únicas (`primaryKey`), restricciones únicas (`unique`), campos no nulos (`notNull`) y autoincrementos automáticos tipo SQLite.
 *   **Consultas Fluidas:** Filtra colecciones usando predicados dinámicos con métodos anidados: `.where()`, `.orderBy()`, `.limit()`, `.offset()`, `.execute()`.
-*   **Reactividad en Tiempo Real:** Sistema de suscripción de publicación/suscripción incorporado para enlazar automáticamente el estado almacenado con tus vistas de usuario.
+*   **Reactividad en Tiempo Real:** Sistema de suscripción incorporado para enlazar automáticamente el estado almacenado con tus vistas de usuario.
 
 ---
 
 ## 🛠️ Arquitectura Modular
 
-En cumplimiento del patrón de **Desarrollo Modular Ultra**, la librería está dividida en submódulos especializados para facilitar actualizaciones independientes y depuración de errores:
+En cumplimiento del patrón de **Desarrollo Modular Ultra**, la librería está dividida en submódulos especializados para facilitar actualizaciones independientes y depuración de errores sin romper la aplicación:
 
-1.  [`Storage.ts`](./Storage.ts): Capa de abstracción persistente (LocalStorage vs InMemory).
-2.  [`Schema.ts`](./Schema.ts): Definición semántica de tipos y columnas fluent.
-3.  [`Query.ts`](./Query.ts): Motor de procesamiento de filtros y criterios de búsqueda.
-4.  [`Table.ts`](./Table.ts): Administrador de operaciones atómicas CRUD y protección de integridad referencial.
-5.  [`Database.ts`](./Database.ts): Fachada centralizadora y gestor reactivo del almacenamiento.
+1.  [`Storage.ts`](./Storage.ts): Capa de abstracción persistente (LocalStorage vs InMemory con SSR safety).
+2.  [`Schema.ts`](./Schema.ts): Definición semántica de tipos, columnas fluent y soporte relacional.
+3.  [`Query.ts`](./Query.ts): Motor perezoso de procesamiento de filtros y criterios de búsqueda.
+4.  [`Table.ts`](./Table.ts): Administrador de operaciones atómicas CRUD, autoincrementos y unicidad física.
+5.  [`Database.ts`](./Database.ts): Fachada centralizadora, gestor reactivo del almacenamiento y orquestador central.
+6.  [`Sync.ts`](./Sync.ts): Motor de sincronización, exportador e importador seguro transaccional.
+7.  [`Crypto.ts`](./Crypto.ts): Algoritmo simétrico por bloques síncronos para cifrado de disco local en tiempo de persistencia.
+8.  [`Relations.ts`](./Relations.ts): Motor relacional para gobernar e interceptar integridad de claves foráneas.
 
 ---
 
@@ -218,4 +224,4 @@ export default function ListaTareas() {
 
 ## 📄 Licencia
 
-Este proyecto se distribuye bajo la licencia **MIT (Open-Source)**. ¡Eres libre de copiarlo, extenderlo y comercializarlo sin restricciones!
+Este proyecto se distribuye bajo la licencia **Apache-2.0 (Open-Source)**. ¡Eres libre de usarlo, extenderlo, modificarlo y distribuirlo para propósitos comerciales o privados bajo las condiciones de Apache!
