@@ -1,0 +1,6 @@
+{
+  "name": "Dev Library Hub",
+  "description": "Un catálogo elegante e interactivo para explorar, probar en vivo y descargar mis librerías y utilidades open-source.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
