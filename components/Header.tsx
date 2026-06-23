@@ -1,9 +1,55 @@
 'use client';
 
-import React from 'react';
-import { Sparkles, Star, Download, Code2, Layers, Github } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Sparkles, Star, GitFork, Code2, Layers, Github } from 'lucide-react';
+import Image from 'next/image';
+
+interface GithubRepoStats {
+  stars: number;
+  forks: number;
+  avatarUrl: string | null;
+  isLoading: boolean;
+}
 
 export default function Header() {
+  const [stats, setStats] = useState<GithubRepoStats>({
+    stars: 1, // Fallback realista por si falla la API
+    forks: 0,
+    avatarUrl: null,
+    isLoading: true,
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch('https://api.github.com/repos/LuisAlejandro544/Librerias')
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Github API rate limit or error');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (isMounted) {
+          setStats({
+            stars: data.stargazers_count ?? 1,
+            forks: data.forks_count ?? 0,
+            avatarUrl: data.owner?.avatar_url ?? null,
+            isLoading: false,
+          });
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          // Fallback elegante
+          setStats((prev) => ({ ...prev, isLoading: false }));
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <header className="border-b border-[#27272A] bg-[#09090B]/90 backdrop-blur-md sticky top-0 z-40 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -22,29 +68,33 @@ export default function Header() {
                 </span>
               </h1>
               <p className="text-xs text-[#A1A1AA] font-medium">
-                Explora y experimenta con mis paquetes y utilidades open-source de alto rendimiento.
+                Catálogo de utilidades de alto rendimiento en el ecosistema Kotlite.
               </p>
             </div>
           </div>
 
-          {/* Estadísticas agregadas consolidadas y Botón de Perfil */}
+          {/* Estadísticas en Vivo desde GitHub */}
           <div className="flex flex-wrap items-center gap-4 text-xs font-mono">
             
-            {/* Total Stars */}
+            {/* Repo Stars */}
             <div className="flex items-center gap-2 bg-[#18181B] border border-[#27272A] rounded-xl px-3.5 py-2">
               <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
               <div>
-                <span className="text-[9px] text-[#71717A] block font-sans uppercase">Stars</span>
-                <span className="font-bold text-[#FAFAFA]">6.4K+</span>
+                <span className="text-[9px] text-[#71717A] block font-sans uppercase">GitHub Stars</span>
+                <span className="font-bold text-[#FAFAFA]">
+                  {stats.isLoading ? '...' : stats.stars}
+                </span>
               </div>
             </div>
 
-            {/* Total Downloads */}
+            {/* Repo Forks */}
             <div className="flex items-center gap-2 bg-[#18181B] border border-[#27272A] rounded-xl px-3.5 py-2">
-              <Download className="w-3.5 h-3.5 text-indigo-400" />
+              <GitFork className="w-3.5 h-3.5 text-indigo-400" />
               <div>
-                <span className="text-[9px] text-[#71717A] block font-sans uppercase">Descargas</span>
-                <span className="font-bold text-[#FAFAFA]">214K/mes</span>
+                <span className="text-[9px] text-[#71717A] block font-sans uppercase">GitHub Forks</span>
+                <span className="font-bold text-[#FAFAFA]">
+                  {stats.isLoading ? '...' : stats.forks}
+                </span>
               </div>
             </div>
 
@@ -52,20 +102,33 @@ export default function Header() {
             <div className="flex items-center gap-2 bg-[#18181B] border border-[#27272A] rounded-xl px-3.5 py-2">
               <Layers className="w-3.5 h-3.5 text-purple-400" />
               <div>
-                <span className="text-[9px] text-[#71717A] block font-sans uppercase">Hechas</span>
-                <span className="font-bold text-[#FAFAFA]">4 Activas</span>
+                <span className="text-[9px] text-[#71717A] block font-sans uppercase">Módulos</span>
+                <span className="font-bold text-[#FAFAFA]">1 Activo + 1 Propuesta</span>
               </div>
             </div>
 
-            {/* Github Profile Button */}
+            {/* Github Profile Link */}
             <a
-              href="https://github.com"
+              href="https://github.com/LuisAlejandro544/Librerias"
               target="_blank"
               rel="noreferrer"
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-all duration-350 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition-all duration-350 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 flex items-center gap-2 cursor-pointer"
             >
-              <Github className="w-3.5 h-3.5" />
-              <span>@github</span>
+              {stats.avatarUrl ? (
+                <div className="relative w-4 h-4 rounded-full overflow-hidden border border-white/20">
+                  <Image
+                    src={stats.avatarUrl}
+                    alt="LuisAlejandro544"
+                    fill
+                    sizes="16px"
+                    className="object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+              ) : (
+                <Github className="w-3.5 h-3.5" />
+              )}
+              <span>@LuisAlejandro544</span>
             </a>
 
           </div>
