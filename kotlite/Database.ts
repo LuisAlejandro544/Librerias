@@ -7,6 +7,7 @@ import { StorageEngine, getOptimalStorage } from './Storage';
 import { TableSchema, TableSchemaBuilder } from './Schema';
 import { KotliteTable } from './Table';
 import { RowData } from './Query';
+import { KotliteCrypto } from './Crypto';
 
 export type DatabaseConfigLambda = (dbBuilder: KotliteDatabaseBuilder) => void;
 export type SubscriptionCallback = (tableName: string, rows: RowData[]) => void;
@@ -16,14 +17,19 @@ export class KotliteDatabase {
   private storage: StorageEngine;
   private tables: Record<string, KotliteTable> = {};
   private subscribers: Set<SubscriptionCallback> = new Set();
+  private crypto?: KotliteCrypto;
 
   constructor(
     dbName: string,
     schemas: Record<string, TableSchema>,
-    storageSpec?: StorageEngine
+    storageSpec?: StorageEngine,
+    encryptionKey?: string
   ) {
     this.dbName = dbName;
     this.storage = storageSpec ?? getOptimalStorage();
+    if (encryptionKey) {
+      this.crypto = new KotliteCrypto(encryptionKey);
+    }
     this.initializeTables(schemas);
   }
 
@@ -33,15 +39,18 @@ export class KotliteDatabase {
   private initializeTables(schemas: Record<string, TableSchema>) {
     for (const [tableName, schema] of Object.entries(schemas)) {
       const storageKey = `kotlite:${this.dbName}:${tableName}`;
-      const savedData = this.storage.getItem(storageKey);
+      let savedData = this.storage.getItem(storageKey);
       let initialRows: RowData[] = [];
 
       if (savedData) {
         try {
+          if (this.crypto) {
+            savedData = this.crypto.decrypt(savedData);
+          }
           initialRows = JSON.parse(savedData);
         } catch (e) {
           console.error(
-            `[Kotlite Database Warn] No se pudieron revivir los registros guardados de la tabla '${tableName}'. Iniciando vacía.`,
+            `[Kotlite Database Warn] No se pudieron revivir o descifrar los registros guardados de la tabla '${tableName}'. Iniciando vacía.`,
             e
           );
         }
@@ -52,13 +61,26 @@ export class KotliteDatabase {
         schema,
         initialRows,
         (updatedRows) => {
+          let serialized = JSON.stringify(updatedRows);
+          if (this.crypto) {
+            serialized = this.crypto.encrypt(serialized);
+          }
           // 1. Guardar de forma atómica e instantánea en el motor persistente
-          this.storage.setItem(storageKey, JSON.stringify(updatedRows));
+          this.storage.setItem(storageKey, serialized);
           // 2. Transmitir el nuevo estado de datos a todos los hooks y UI suscritos
           this.notifySubscribers(tableName, updatedRows);
-        }
+        },
+        () => this.tables
       );
     }
+  }
+
+  getTables(): Record<string, KotliteTable> {
+    return this.tables;
+  }
+
+  getDatabaseName(): string {
+    return this.dbName;
   }
 
   /**
@@ -145,9 +167,10 @@ export class KotliteDatabaseBuilder {
 export function createKotliteDatabase(
   dbName: string,
   configLambda: DatabaseConfigLambda,
-  customStorage?: StorageEngine
+  customStorage?: StorageEngine,
+  encryptionKey?: string
 ): KotliteDatabase {
   const dbBuilder = new KotliteDatabaseBuilder();
   configLambda(dbBuilder);
-  return new KotliteDatabase(dbName, dbBuilder.getSchemas(), customStorage);
+  return new KotliteDatabase(dbName, dbBuilder.getSchemas(), customStorage, encryptionKey);
 }

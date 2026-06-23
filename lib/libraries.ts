@@ -13,7 +13,7 @@ export interface Library {
   features: string[];
   installation: string;
   usageCode: string;
-  playgroundType: 'grid' | 'state' | 'fetch' | 'animate';
+  playgroundType: 'grid' | 'state' | 'fetch' | 'animate' | 'kotlite';
 }
 
 export const libraries: Library[] = [
@@ -175,5 +175,48 @@ spring.animateTo(250, (currentValue) => {
   box.style.transform = \`translateX(\${currentValue}px)\`;
 });`,
     playgroundType: "animate"
+  },
+  {
+    id: "kotlite-db",
+    name: "kotlite-db",
+    tagline: "Motor de base de datos local inmutable, reactivo y SSR-Safe inspirado en el DSL de Kotlin.",
+    description: "Una solución ligera y moderna creada bajo Desarrollo Modular Ultra para gestionar persistencia reactiva en memoria y localStorage de forma 100% segura en Next.js (SSR). Ofrece una definición de esquemas declarativa mediante Chaining, validaciones estrictas de unicidad de claves y un motor de consultas fluido idéntico a las colecciones de Kotlin.",
+    category: "state",
+    stars: 2890,
+    downloads: "12k/m",
+    size: "4.5 KB",
+    version: "v1.0.0",
+    githubUrl: "https://github.com/developer/kotlite-db",
+    npmCommand: "curl -sSL [APP_URL]/api/download/install.sh | bash",
+    features: [
+      "100% Seguro contra SSR: Conmutación en caliente entre LocalStorage e InMemory",
+      "Sintaxis estilo Kotlin: Declara tablas, columnas y constraints de forma fluida",
+      "Restricciones sólidas: Autoincremento automático, claves únicas, campos No-Nulos y valores por defecto",
+      "reactividad innata: Patrón PubSub integrado con Hook React para recargas automáticas de interfaz"
+    ],
+    installation: `curl -sSL [APP_URL]/api/download/install.sh | bash
+
+# O si deseas descargarlo en una carpeta específica:
+mkdir -p mi-proyecto && cd mi-proyecto
+curl -sSL [APP_URL]/api/download/install.sh | bash`,
+    usageCode: `import { createKotliteDatabase } from './kotlite';
+
+// 1. Declaración limpia con Kotlin DSL (db_config.ts)
+export const db = createKotliteDatabase("portfolio_db", (builder) => {
+  builder.table("todos", (t) => {
+    t.integer("id").primaryKey(); // Autoincremento integrado
+    t.text("title").notNull();
+    t.boolean("done").default(false);
+  });
+});
+
+// 2. Consulta fluida de registros
+const finalResult = db.table("todos")
+  .query()
+  .where(t => t.done === false)
+  .orderBy("id", "DESC")
+  .limit(5)
+  .execute();`,
+    playgroundType: "kotlite" // can be interactive with its own playground, or map it nicely.
   }
 ];

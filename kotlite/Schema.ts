@@ -5,6 +5,12 @@
 
 export type ColumnType = 'INTEGER' | 'TEXT' | 'REAL' | 'BOOLEAN' | 'DATETIME';
 
+export interface ForeignKeyDefinition {
+  parentTable: string;
+  parentColumn: string;
+  onDelete?: 'CASCADE' | 'RESTRICT' | 'SET_NULL';
+}
+
 export interface ColumnDefinition {
   name: string;
   type: ColumnType;
@@ -12,6 +18,7 @@ export interface ColumnDefinition {
   isUnique: boolean;
   isNullable: boolean;
   defaultValue?: any;
+  foreignKey?: ForeignKeyDefinition;
 }
 
 /**
@@ -69,6 +76,29 @@ export class ColumnBuilder {
    */
   default(value: any): ColumnBuilder {
     this.col.defaultValue = value;
+    return this;
+  }
+
+  /**
+   * Define una restricción de clave foránea apuntando a otra tabla/columna.
+   */
+  references(
+    parentTable: string,
+    parentColumn: string,
+    options?: { onDelete?: 'CASCADE' | 'RESTRICT' | 'SET_NULL' } | 'CASCADE' | 'RESTRICT' | 'SET_NULL'
+  ): ColumnBuilder {
+    let onDelete: 'CASCADE' | 'RESTRICT' | 'SET_NULL' = 'RESTRICT';
+    if (typeof options === 'string') {
+      onDelete = options;
+    } else if (options && options.onDelete) {
+      onDelete = options.onDelete;
+    }
+
+    this.col.foreignKey = {
+      parentTable,
+      parentColumn,
+      onDelete,
+    };
     return this;
   }
 

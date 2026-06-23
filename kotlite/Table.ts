@@ -6,20 +6,24 @@
 
 import { TableSchema, ColumnType } from './Schema';
 import { RowData, QueryBuilder } from './Query';
+import { KotliteRelationsEngine } from './Relations';
 
 export class KotliteTable {
   private schema: TableSchema;
   private rows: RowData[] = [];
   private onStateChanged: (rows: RowData[]) => void;
+  private getTables?: () => Record<string, KotliteTable>;
 
   constructor(
     schema: TableSchema,
     initialRows: RowData[],
-    onStateChanged: (rows: RowData[]) => void
+    onStateChanged: (rows: RowData[]) => void,
+    getTables?: () => Record<string, KotliteTable>
   ) {
     this.schema = schema;
     this.rows = initialRows;
     this.onStateChanged = onStateChanged;
+    this.getTables = getTables;
   }
 
   getSchema(): TableSchema {
@@ -158,6 +162,13 @@ export class KotliteTable {
     // Validar propiedades consolidadas antes de guardar
     this.validateRow(newRow, false);
 
+    // Validar integridad referencial (Claves Foráneas)
+    if (this.getTables) {
+      const tables = this.getTables();
+      const getter = (tblName: string) => tables[tblName]?.all() || [];
+      KotliteRelationsEngine.validateInsertion(this.schema.name, newRow, this.schema, getter);
+    }
+
     this.rows.push(newRow);
     this.onStateChanged([...this.rows]);
 
@@ -190,6 +201,14 @@ export class KotliteTable {
         affectedCounter++;
         const draftRow = { ...row, ...updates };
         this.validateRow(draftRow, true, row); // Verifica integridad de unicidades
+        
+        // Validar integridad referencial (Claves Foráneas) en actualizaciones
+        if (this.getTables) {
+          const tables = this.getTables();
+          const getter = (tblName: string) => tables[tblName]?.all() || [];
+          KotliteRelationsEngine.validateInsertion(this.schema.name, draftRow, this.schema, getter);
+        }
+        
         return draftRow;
       }
       return row;
@@ -207,8 +226,28 @@ export class KotliteTable {
    * Elimina cualquier fila que coincida con la lambda de búsqueda.
    * Retorna el número de registros purgados.
    */
-  delete(predicate: (row: RowData) => boolean): number {
+  delete(predicate: (row: RowData) => boolean, skipFkCheck: boolean = false): number {
     const startCount = this.rows.length;
+
+    // Si no se pide omitir la verificación y contamos con acceso a las tablas relacionadas, ejecutamos trigger onDelete
+    if (!skipFkCheck && this.getTables) {
+      const tables = this.getTables();
+      const rowsToDelete = this.rows.filter(predicate);
+
+      for (const row of rowsToDelete) {
+        for (const [colName, colDef] of Object.entries(this.schema.columns)) {
+          if (colDef.isPrimaryKey) {
+            KotliteRelationsEngine.handleParentDeletion(
+              this.schema.name,
+              row,
+              colName,
+              tables
+            );
+          }
+        }
+      }
+    }
+
     this.rows = this.rows.filter((row) => !predicate(row));
     const deletedCount = startCount - this.rows.length;
 

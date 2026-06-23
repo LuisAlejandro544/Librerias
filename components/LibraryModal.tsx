@@ -9,6 +9,7 @@ import PlaygroundGrid from './PlaygroundGrid';
 import PlaygroundState from './PlaygroundState';
 import PlaygroundFetch from './PlaygroundFetch';
 import PlaygroundAnimate from './PlaygroundAnimate';
+import PlaygroundKotlite from './PlaygroundKotlite';
 
 interface LibraryModalProps {
   library: Library;
@@ -19,9 +20,23 @@ export default function LibraryModal({ library, onClose }: LibraryModalProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'sandbox' | 'docs'>('sandbox'); // Por defecto abrimos en sandbox para incentivar juego interactivo!
   const [copiedInstall, setCopiedInstall] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
+  const [appUrl, setAppUrl] = useState('');
+
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        setAppUrl(window.location.origin);
+      }, 0);
+    }
+  }, []);
+
+  const formatWithOrigin = (text: string) => {
+    const origin = appUrl || 'https://ai-studio.build';
+    return text.replace(/\[APP_URL\]/g, origin);
+  };
 
   const copyInstallCommand = () => {
-    navigator.clipboard.writeText(library.npmCommand);
+    navigator.clipboard.writeText(formatWithOrigin(library.npmCommand));
     setCopiedInstall(true);
     setTimeout(() => setCopiedInstall(false), 2000);
   };
@@ -42,6 +57,8 @@ export default function LibraryModal({ library, onClose }: LibraryModalProps) {
         return <PlaygroundFetch />;
       case 'animate':
         return <PlaygroundAnimate />;
+      case 'kotlite':
+        return <PlaygroundKotlite />;
       default:
         return (
           <div className="text-center py-12 text-[#71717A] text-xs">
@@ -100,7 +117,7 @@ export default function LibraryModal({ library, onClose }: LibraryModalProps) {
           <div className="flex items-center gap-2">
             <Terminal className="w-4 h-4 text-[#71717A]" />
             <code className="font-mono bg-[#09090B] text-indigo-300 px-2 py-1 rounded select-all font-semibold break-all border border-[#27272A]">
-              {library.npmCommand}
+              {formatWithOrigin(library.npmCommand)}
             </code>
           </div>
           <button
@@ -187,7 +204,7 @@ export default function LibraryModal({ library, onClose }: LibraryModalProps) {
                   Pasos de Instalación Complementarios
                 </span>
                 <pre className="text-xs bg-[#18181B] text-indigo-300 border border-[#27272A] font-mono p-4 rounded-xl leading-relaxed whitespace-pre-wrap select-all">
-                  {library.installation}
+                  {formatWithOrigin(library.installation)}
                 </pre>
               </div>
             </div>
