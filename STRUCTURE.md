@@ -8,6 +8,9 @@ Para garantizar la mantenibilidad absoluta, prevenir acoplamientos rígidos y as
 
 ```
 /
+├── .github/                  # Integración Continua y Automatización
+│   └── workflows/
+│       └── nextjs.yml        # Flujo inteligente de despliegue a GitHub Pages libre de errores de lockfile
 ├── app/                      # Enrutamiento de Next.js (App Router)
 │   ├── api/                  # Endpoints del servidor (ej. Gemini Proxy)
 │   ├── globals.css           # Punto de entrada de Tailwind v4 y reset CSS
@@ -35,6 +38,12 @@ Para garantizar la mantenibilidad absoluta, prevenir acoplamientos rígidos y as
 ├── lib/                      # Configuraciones estáticas, types e hilos lógicos
 │   └── libraries.ts          # DataSet de los repositorios y comandos de instalación
 │
+├── librerias/                # Librerías de desarrollo de vanguardia y motores locales
+│   └── stridb/               # Stridb: IndexedDB con Cifrado AES-GCM
+│       ├── .gitignore        # Exclusión de archivos temporales e IDEs en la sub-librería
+│       └── ...               # Submódulos ultra-modulares de Stridb
+│
+├── .gitignore                # Reglas globales de exclusión para evitar la subida de basura
 └── metadata.json             # Permisos globales, nombre de app e identificación de API
 ```
 

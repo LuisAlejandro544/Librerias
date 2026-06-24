@@ -117,6 +117,14 @@ export class KotliteDatabase {
     return this.tables;
   }
 
+  getStorage(): StorageEngine {
+    return this.storage;
+  }
+
+  getCrypto(): KotliteCrypto | undefined {
+    return this.crypto;
+  }
+
   getDatabaseName(): string {
     return this.dbName;
   }

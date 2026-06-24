@@ -1,0 +1,20 @@
+name: Publish Stridb
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'librerias/stridb/**'
+      - '.github/workflows/publish-stridb.yml'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Publish Stridb package
+        working-directory: ./librerias/stridb
+        run: npx jsr publish

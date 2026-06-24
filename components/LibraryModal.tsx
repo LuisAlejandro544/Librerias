@@ -11,6 +11,7 @@ import PlaygroundFetch from './PlaygroundFetch';
 import PlaygroundAnimate from './PlaygroundAnimate';
 import PlaygroundKotlite from './PlaygroundKotlite';
 import PlaygroundSync from './PlaygroundSync';
+import PlaygroundStridb from './PlaygroundStridb';
 
 interface LibraryModalProps {
   library: Library;
@@ -62,6 +63,8 @@ export default function LibraryModal({ library, onClose }: LibraryModalProps) {
         return <PlaygroundKotlite />;
       case 'sync':
         return <PlaygroundSync />;
+      case 'stridb':
+        return <PlaygroundStridb />;
       default:
         return (
           <div className="text-center py-12 text-[#71717A] text-xs">

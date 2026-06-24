@@ -1,0 +1,18 @@
+{
+  "name": "@alejandro/stridb",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "exports": "./mod.ts",
+  "publish": {
+    "include": [
+      "README.md",
+      "LICENSE",
+      "STRUCTURE.md",
+      "TUTORIAL.md",
+      "CONTRIBUTING.md",
+      "LIMITATIONS_AND_MODS.md",
+      "AI_CONTEXT.md",
+      "**/*.ts"
+    ]
+  }
+}

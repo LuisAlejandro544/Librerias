@@ -25,12 +25,9 @@ export const db = createKotliteDatabase("mi_app_db", (builder) => {
   // Tabla de Tareas (con Clave Foránea / Relación 1:N)
   builder.table("tareas", (t) => {
     t.integer("id").primaryKey();
-    t.integer("usuarioId").notNull();
+    t.integer("usuarioId").notNull().references("usuarios", "id", "CASCADE");
     t.text("descripcion");
     t.boolean("completado").default(false);
-    
-    // Configuración de integridad referencial
-    t.foreignKey("usuarioId", "usuarios", "id", "CASCADE"); 
   });
 });
 ```

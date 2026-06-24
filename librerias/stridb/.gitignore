@@ -1,0 +1,10 @@
+# Ignorar basura específica del editor/sistema dentro de la sub-librería
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.tmp
+*.bak
+node_modules/
+dist/
+build/
