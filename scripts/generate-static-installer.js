@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 try {
-  const kotliteDir = path.join(process.cwd(), "kotlite");
+  const kotliteDir = path.join(process.cwd(), "librerias", "kotlite");
   const publicDir = path.join(process.cwd(), "public");
 
   if (!fs.existsSync(publicDir)) {
@@ -18,12 +18,17 @@ try {
     "Sync.ts",
     "Crypto.ts",
     "Relations.ts",
+    "Debug.ts",
+    "Migration.ts",
     "index.ts",
     "mod.ts",
     "jsr.json",
     "README.md",
     "STRUCTURE.md",
     "SETUP.md",
+    "TUTORIAL.md",
+    "CONTRIBUTING.md",
+    "MODIFICATION_GUIDE.md",
     "LICENSE"
   ];
 
@@ -86,12 +91,13 @@ echo "  ✅ INSTALACIÓN COMPLETADA CON ÉXITO"
 echo "======================================================================"
 echo -e "\${COLOR_RESET}"
 echo -e "📂 La librería se ha instalado en: \${COLOR_INFO}./kotlite/\${COLOR_RESET}"
-echo -e "📑 Archivos creados: \${COLOR_SUCCESS}15/15\${COLOR_RESET}"
+echo -e "📑 Archivos creados: \${COLOR_SUCCESS}${files.length}/${files.length}\${COLOR_RESET}"
 echo ""
 echo -e "💡 \${COLOR_INFO}¿Qué sigue?\${COLOR_RESET}"
-echo -e " 1. Abre \${COLOR_INFO}kotlite/README.md\${COLOR_RESET} o \${COLOR_INFO}kotlite/SETUP.md\${COLOR_RESET} para ver guías rápidas."
-echo -e " 2. Crea tu archivo de configuración de base de datos (ej: \${COLOR_INFO}db.ts\${COLOR_RESET})."
-echo -e " 3. Importa el hook reactivo de ejemplo y disfruta del estilo de Kotlin en TS."
+echo -e " 1. Abre \${COLOR_INFO}kotlite/TUTORIAL.md\${COLOR_RESET} para aprender a modificar cada componente."
+echo -e " 2. Configura tu almacenamiento para usar IndexedDB o LocalStorage."
+echo -e " 3. Utiliza la suite de depuración \${COLOR_INFO}KotliteDebugger\${COLOR_RESET} en consola para diagnosticar."
+echo -e " 4. Migra tus esquemas y volcados de SQLite/Room usando el \${COLOR_INFO}KotliteMigrationBridge\${COLOR_RESET}."
 echo ""
 echo -e "\${COLOR_SUCCESS}¡Disfruta desarrollando de forma ultra modular con Kotlite!\${COLOR_RESET}"
 `;

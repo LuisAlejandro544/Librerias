@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'librerias/kotlite/**'
+      - '.github/workflows/publish.yml'
 
 jobs:
   publish:
@@ -13,4 +16,5 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Publish package
+        working-directory: ./librerias/kotlite
         run: npx jsr publish

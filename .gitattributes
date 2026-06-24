@@ -1,0 +1,25 @@
+# Configuración de atributos Git para normalizar finales de línea (LF)
+# Esto previene errores de sintaxis en scripts como 'install.sh' cuando se descargan desde Windows
+
+# Forzar por defecto que Git auto-detecte archivos de texto y los normalice a LF
+* text=auto eol=lf
+
+# Forzar finales de línea LF estrictos para archivos específicos de desarrollo
+*.sh text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+
+# Mantener archivos binarios sin modificar
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary

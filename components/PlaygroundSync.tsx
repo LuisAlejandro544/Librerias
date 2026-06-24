@@ -12,16 +12,18 @@ interface SyncItem {
   origin: 'local' | 'cloud' | 'both';
 }
 
+const BASE_TIME = 1719225600000; // Marca de tiempo estática para mantener la pureza del componente
+
 export default function PlaygroundSync() {
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [localDB, setLocalDB] = useState<SyncItem[]>([
-    { id: '1', title: 'Completar documentación de Kotlite', status: 'synced', updatedAt: Date.now() - 3600000, origin: 'both' },
-    { id: '2', title: 'Optimizar índices en Storage.ts', status: 'synced', updatedAt: Date.now() - 1800000, origin: 'both' },
-    { id: '3', title: 'Crear tests de transacciones CRUD', status: 'pending', updatedAt: Date.now(), origin: 'local' },
+    { id: '1', title: 'Completar documentación de Kotlite', status: 'synced', updatedAt: BASE_TIME - 3600000, origin: 'both' },
+    { id: '2', title: 'Optimizar índices en Storage.ts', status: 'synced', updatedAt: BASE_TIME - 1800000, origin: 'both' },
+    { id: '3', title: 'Crear tests de transacciones CRUD', status: 'pending', updatedAt: BASE_TIME, origin: 'local' },
   ]);
   const [cloudDB, setCloudDB] = useState<SyncItem[]>([
-    { id: '1', title: 'Completar documentación de Kotlite', status: 'synced', updatedAt: Date.now() - 3600000, origin: 'both' },
-    { id: '2', title: 'Optimizar índices en Storage.ts (Modificado en Cloud)', status: 'synced', updatedAt: Date.now() - 600000, origin: 'cloud' },
+    { id: '1', title: 'Completar documentación de Kotlite', status: 'synced', updatedAt: BASE_TIME - 3600000, origin: 'both' },
+    { id: '2', title: 'Optimizar índices en Storage.ts (Modificado en Cloud)', status: 'synced', updatedAt: BASE_TIME - 600000, origin: 'cloud' },
   ]);
 
   const [logs, setLogs] = useState<string[]>([

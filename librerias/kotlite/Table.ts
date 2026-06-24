@@ -7,6 +7,7 @@
 import { TableSchema, ColumnType } from './Schema';
 import { RowData, QueryBuilder } from './Query';
 import { KotliteRelationsEngine } from './Relations';
+import { KotliteDebugger } from './Debug';
 
 export class KotliteTable {
   private schema: TableSchema;
@@ -50,6 +51,7 @@ export class KotliteTable {
           continue;
         }
         if (colDef.defaultValue === undefined && !colDef.isPrimaryKey) {
+          KotliteDebugger.logConstraintViolation(this.schema.name, colName, "NOT_NULL", val);
           throw new Error(
             `[Kotlite Constraint Error] La columna No-Nula '${colName}' requiere un valor o un valor predeterminado en la tabla '${this.schema.name}'.`
           );
@@ -58,7 +60,12 @@ export class KotliteTable {
 
       // 2. Controlar integridad de datos
       if (val !== undefined && val !== null) {
-        this.validateType(colName, val, colDef.type);
+        try {
+          this.validateType(colName, val, colDef.type);
+        } catch (err: any) {
+          KotliteDebugger.logError("TYPE_MISMATCH", err.message, `Verifica el tipo de dato enviado para la columna '${colName}'.`);
+          throw err;
+        }
       }
     }
 
@@ -76,6 +83,8 @@ export class KotliteTable {
         });
 
         if (hashConflict) {
+          const constraintType = colDef.isPrimaryKey ? "PRIMARY_KEY" : "UNIQUE";
+          KotliteDebugger.logConstraintViolation(this.schema.name, colName, constraintType, val);
           throw new Error(
             `[Kotlite Constraint Error] Violación de unicidad en '${colName}'. El registro con valor '${val}' ya existe en la tabla '${this.schema.name}'.`
           );
@@ -171,6 +180,7 @@ export class KotliteTable {
 
     this.rows.push(newRow);
     this.onStateChanged([...this.rows]);
+    KotliteDebugger.logTransaction('INSERT', this.schema.name, 1, newRow);
 
     return newRow;
   }
@@ -179,7 +189,7 @@ export class KotliteTable {
    * Construye una consulta interactiva sobre la tabla
    */
   query(): QueryBuilder {
-    return new QueryBuilder(this.rows);
+    return new QueryBuilder(this.rows, this.schema.name);
   }
 
   /**
@@ -217,6 +227,7 @@ export class KotliteTable {
     if (affectedCounter > 0) {
       this.rows = modifiedRows;
       this.onStateChanged([...this.rows]);
+      KotliteDebugger.logTransaction('UPDATE', this.schema.name, affectedCounter, updates);
     }
 
     return affectedCounter;
@@ -253,6 +264,7 @@ export class KotliteTable {
 
     if (deletedCount > 0) {
       this.onStateChanged([...this.rows]);
+      KotliteDebugger.logTransaction('DELETE', this.schema.name, deletedCount);
     }
 
     return deletedCount;
@@ -262,7 +274,18 @@ export class KotliteTable {
    * Trunca (vacía) completamente la tabla
    */
   truncate(): void {
+    const originalCount = this.rows.length;
     this.rows = [];
     this.onStateChanged([]);
+    KotliteDebugger.logTransaction('TRUNCATE', this.schema.name, originalCount);
+  }
+
+  /**
+   * Carga masiva de datos en caliente silenciando logs individuales y validando integridad.
+   * Utilizado para inicializaciones tardías como el volcado de IndexedDB.
+   */
+  importBulkSilent(newRows: RowData[]): void {
+    this.rows = [...newRows];
+    this.onStateChanged([...this.rows]);
   }
 }

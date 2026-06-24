@@ -34,6 +34,44 @@ export class KotliteDatabase {
   }
 
   /**
+   * Inicializa de forma asíncrona el motor de almacenamiento (por ejemplo, si se utiliza IndexedDB)
+   * y carga la caché en caliente a la base de datos de forma segura.
+   */
+  async init(): Promise<void> {
+    if (this.storage.init) {
+      await this.storage.init();
+      this.reloadTables();
+    }
+  }
+
+  /**
+   * Recarga las tablas una vez que la caché en memoria del almacenamiento híbrido se ha poblado
+   */
+  private reloadTables() {
+    for (const [tableName, table] of Object.entries(this.tables)) {
+      const storageKey = `kotlite:${this.dbName}:${tableName}`;
+      let savedData = this.storage.getItem(storageKey);
+      let initialRows: RowData[] = [];
+
+      if (savedData) {
+        try {
+          if (this.crypto) {
+            savedData = this.crypto.decrypt(savedData);
+          }
+          initialRows = JSON.parse(savedData);
+        } catch (e) {
+          console.error(
+            `[Kotlite Database Warn] No se pudieron revivir los registros tras la recarga asíncrona en la tabla '${tableName}'.`,
+            e
+          );
+        }
+      }
+
+      table.importBulkSilent(initialRows);
+    }
+  }
+
+  /**
    * Revive las tablas persistidas e inicializa sus escuchadores locales de sincronización
    */
   private initializeTables(schemas: Record<string, TableSchema>) {

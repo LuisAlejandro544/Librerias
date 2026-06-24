@@ -9,6 +9,7 @@
 export {
   InMemoryStorageEngine,
   LocalStorageEngine,
+  IndexedDBStorageEngine,
   getOptimalStorage,
 } from './Storage';
 
@@ -43,9 +44,18 @@ export {
   KotliteRelationsEngine,
 } from './Relations';
 
+export {
+  KotliteDebugger,
+} from './Debug';
+
+export {
+  KotliteMigrationBridge,
+} from './Migration';
+
 // Exportación de Tipos e Interfaces (declaraciones de tipos para TypeScript)
 export type { StorageEngine } from './Storage';
 export type { ColumnType, ColumnDefinition, TableSchema, ForeignKeyDefinition } from './Schema';
 export type { RowData } from './Query';
 export type { DatabaseConfigLambda, SubscriptionCallback } from './Database';
 export type { KotliteBackup, ImportOptions, ImportResult } from './Sync';
+export type { KotlinEntityField } from './Migration';

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { createKotliteDatabase } from '../kotlite';
+import { createKotliteDatabase } from '../librerias/kotlite';
 import { Plus, Trash2, ShieldAlert, Sparkles, Database, Code, RefreshCw, CheckCircle, Search, ToggleLeft, ToggleRight } from 'lucide-react';
 
 // Instanciar la base de datos de pruebas (Sandbox)
