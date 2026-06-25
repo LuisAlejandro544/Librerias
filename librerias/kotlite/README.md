@@ -6,6 +6,25 @@ Es ideal para aplicaciones web (**Next.js**, **React**, **Vite**), ya que es **1
 
 ---
 
+## ⚡ Instalación Rápida (JSR)
+
+Kotlite DB se distribuye a través de **JSR** para garantizar compatibilidad nativa de tipos de TypeScript y optimización de código.
+
+```bash
+# Node.js (npm)
+npx jsr add @alejandro/kotlite-db
+
+# Deno
+deno add jsr:@alejandro/kotlite-db
+
+# Bun
+bunx jsr add @alejandro/kotlite-db
+```
+
+> 📖 Para una guía de instalación completa y detallada usando otros gestores como **pnpm**, **Yarn**, **vlt** e importaciones directas, por favor consulta la guía detallada: [**Guía de Instalación (Install.md)**](./Install.md).
+
+---
+
 ## ✨ Características Principales
 
 *   **Kotlin-Style DSL:** Define esquemas de tablas e inicializa tu base de datos mediante bloques funcionales encadenados y descriptivos.

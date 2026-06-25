@@ -10,7 +10,8 @@ Para garantizar la mantenibilidad absoluta, prevenir acoplamientos rígidos y as
 /
 ├── .github/                  # Integración Continua y Automatización
 │   └── workflows/
-│       └── nextjs.yml        # Flujo inteligente de despliegue a GitHub Pages libre de errores de lockfile
+│       ├── publish.yml       # Flujo para publicar Kotlite en JSR
+│       └── publish-stridb.yml # Flujo para publicar Stridb en JSR
 ├── app/                      # Enrutamiento de Next.js (App Router)
 │   ├── api/                  # Endpoints del servidor (ej. Gemini Proxy)
 │   ├── globals.css           # Punto de entrada de Tailwind v4 y reset CSS
