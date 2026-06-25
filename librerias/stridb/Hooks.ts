@@ -4,6 +4,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { StridbDatabase } from './Database';
 import { StridbQuery } from './Query';
 
+export interface StridbQueryResult<T> {
+  data: T[];
+  loading: boolean;
+  error: Error | null;
+  refetch: () => Promise<void>;
+}
+
 /**
  * Hook reactivo para realizar consultas sobre tablas de Stridb con actualización automática
  * en tiempo real cuando cambien los datos de la tabla.
@@ -16,7 +23,7 @@ export function useStridbQuery<T = any>(
   db: StridbDatabase,
   tableName: string,
   queryBuilderFn?: (query: StridbQuery<T>) => StridbQuery<T>
-) {
+): StridbQueryResult<T> {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
