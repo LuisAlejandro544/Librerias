@@ -1,6 +1,6 @@
 import { FloatInstance, FloatLayerState, FloatOptions, FloatSubscriber } from './Types';
 
-class FloatLayerManager {
+export class FloatLayerManager {
   private state: FloatLayerState = {
     instances: [],
     focusedId: null,
@@ -390,4 +390,4 @@ class FloatLayerManager {
   }
 }
 
-export const FloatManager = new FloatLayerManager();
+export const FloatManager: FloatLayerManager = new FloatLayerManager();

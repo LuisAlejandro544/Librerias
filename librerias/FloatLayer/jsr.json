@@ -12,8 +12,10 @@
       "LICENSE",
       "STRUCTURE.md",
       "TUTORIAL.md",
-      "ROADMAP.md",
-      "**/*.ts"
+      "CONTRIBUTING.md",
+      "MODIFICATIONS_AND_LIMITATIONS.md",
+      "**/*.ts",
+      "**/*.tsx"
     ]
   }
 }

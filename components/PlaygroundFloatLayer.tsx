@@ -6,7 +6,10 @@ import {
   FloatManager, 
   FloatPcEngine, 
   FloatMobileEngine, 
-  FloatInstance 
+  FloatInstance,
+  TelemetryConsole,
+  FloatDebug,
+  FloatPip
 } from '../librerias/FloatLayer';
 import { 
   Plus, Laptop, Smartphone, LayoutGrid, RotateCcw, 
@@ -68,7 +71,100 @@ export default function PlaygroundFloatLayer() {
   const addLog = useCallback((msg: string, type: 'info' | 'success' | 'warn' = 'info') => {
     const id = Math.random().toString(36).substring(7);
     setLogMessages(prev => [{ id, msg, type }, ...prev.slice(0, 39)]);
+    
+    // Sincronizar también con FloatDebug para la Consola de Telemetría Real-time
+    const levelMap: Record<string, 'info' | 'success' | 'warn' | 'error'> = {
+      info: 'info',
+      success: 'success',
+      warn: 'warn'
+    };
+    FloatDebug.log(msg, levelMap[type] || 'info', 'Playground');
   }, []);
+
+  // Lanzar Consola de Telemetría como Ventana Flotante Independiente
+  const spawnTelemetryConsole = () => {
+    addLog("Iniciando Consola de Telemetría Flotante...", "success");
+    open("telemetry_console", "Consola de Telemetría Real-time", (inst) => {
+      return (
+        <TelemetryConsole maxStoredLogs={100} />
+      );
+    }, {
+      initialWidth: 420,
+      initialHeight: 320,
+      initialX: 80,
+      initialY: 80,
+      isResizable: true,
+      edgeSnapping: true
+    });
+  };
+
+  // Lanzar Picture-in-Picture Real nativo (HTML5 documentPictureInPicture API)
+  const triggerRealPip = async () => {
+    if (typeof window === 'undefined') return;
+    if (!FloatPip.isSupported()) {
+      addLog("¡Navegador no compatible con Picture-in-Picture de Documentos nativo (Chrome/Edge 111+ recomendado)!", "warn");
+      return;
+    }
+
+    addLog("Iniciando Picture-in-Picture Real...", "info");
+    
+    // Crear un contenedor de diseño Tailwind para inyectar en la ventana PiP de sistema operativo
+    const pipEl = document.createElement('div');
+    pipEl.style.height = "100%";
+    pipEl.style.display = "flex";
+    pipEl.style.flexDirection = "column";
+    pipEl.style.justifyContent = "space-between";
+    pipEl.style.color = "#FAFAFA";
+    pipEl.style.padding = "20px";
+    pipEl.style.background = "linear-gradient(to bottom, #09090b, #111115)";
+    pipEl.style.fontFamily = "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+
+    const titleEl = document.createElement('h3');
+    titleEl.innerText = "⚡ FLOATLAYER REAL PIP";
+    titleEl.style.fontSize = "13px";
+    titleEl.style.fontWeight = "bold";
+    titleEl.style.color = "#818cf8";
+    titleEl.style.letterSpacing = "0.05em";
+    titleEl.style.margin = "0 0 10px 0";
+    pipEl.appendChild(titleEl);
+
+    const clockEl = document.createElement('div');
+    clockEl.style.fontSize = "28px";
+    clockEl.style.fontWeight = "900";
+    clockEl.style.textAlign = "center";
+    clockEl.style.margin = "16px 0";
+    clockEl.style.color = "#ffffff";
+    clockEl.innerText = new Date().toLocaleTimeString();
+    pipEl.appendChild(clockEl);
+
+    const descEl = document.createElement('p');
+    descEl.innerText = "Flotando por encima de todas las ventanas de tu sistema operativo actual. ¡Prueba interactiva real!";
+    descEl.style.fontSize = "10px";
+    descEl.style.color = "#71717a";
+    descEl.style.margin = "0";
+    descEl.style.lineHeight = "1.5";
+    pipEl.appendChild(descEl);
+
+    const intervalId = setInterval(() => {
+      clockEl.innerText = new Date().toLocaleTimeString();
+    }, 1000);
+
+    try {
+      await FloatPip.requestPipWindow(pipEl, {
+        width: 320,
+        height: 200,
+        title: "FloatLayer - Ventana PiP",
+        onClose: () => {
+          clearInterval(intervalId);
+          addLog("Ventana PiP nativa cerrada", "warn");
+        }
+      });
+      addLog("¡Ventana PiP levantada a nivel de OS con éxito!", "success");
+    } catch (err: any) {
+      clearInterval(intervalId);
+      addLog(`Fallo al levantar ventana PiP: ${err?.message || err}`, "warn");
+    }
+  };
 
   // Sync state transitions to logs
   useEffect(() => {
@@ -566,6 +662,47 @@ export default function PlaygroundFloatLayer() {
                     *Al activar el contenedor celular, los arrastres simularán snapping magnético y tamaño fluido adaptable en celulares.
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* Advanced Telemetry & PiP Tools */}
+            <div>
+              <span className="text-[10px] text-indigo-400 font-bold font-mono block mb-2.5 uppercase tracking-wider">
+                3. Telemetría y PiP Avanzados (Debug)
+              </span>
+
+              <div className="space-y-2.5 bg-[#09090B] p-4 rounded-xl border border-[#27272A]">
+                <button
+                  onClick={spawnTelemetryConsole}
+                  className="w-full flex items-center justify-between bg-[#121214] hover:bg-zinc-800 border border-zinc-800 p-2 rounded-xl text-left text-xs font-bold transition group cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-6.5 h-6.5 rounded-lg bg-indigo-950 border border-indigo-900/40 text-indigo-400 flex items-center justify-center">
+                      <Terminal className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-white text-[11px]">Consola Flotante</h4>
+                      <p className="text-[8px] text-[#71717A] font-normal">Consola modular como ventana</p>
+                    </div>
+                  </div>
+                  <Plus className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition" />
+                </button>
+
+                <button
+                  onClick={triggerRealPip}
+                  className="w-full flex items-center justify-between bg-[#121214] hover:bg-zinc-800 border border-zinc-800 p-2 rounded-xl text-left text-xs font-bold transition group cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-6.5 h-6.5 rounded-lg bg-purple-950 border border-purple-900/40 text-purple-400 flex items-center justify-center">
+                      <Activity className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <h4 className="text-white text-[11px]">Picture-in-Picture Real</h4>
+                      <p className="text-[8px] text-[#71717A] font-normal">API nativa sobre el escritorio</p>
+                    </div>
+                  </div>
+                  <Plus className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white transition" />
+                </button>
               </div>
             </div>
 

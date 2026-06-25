@@ -11,7 +11,8 @@ Para garantizar la mantenibilidad absoluta, prevenir acoplamientos rígidos y as
 ├── .github/                  # Integración Continua y Automatización
 │   └── workflows/
 │       ├── publish.yml       # Flujo para publicar Kotlite en JSR
-│       └── publish-stridb.yml # Flujo para publicar Stridb en JSR
+│       ├── publish-stridb.yml # Flujo para publicar Stridb en JSR
+│       └── publish-floatlayer.yml # Flujo para publicar FloatLayer en JSR
 ├── app/                      # Enrutamiento de Next.js (App Router)
 │   ├── api/                  # Endpoints del servidor (ej. Gemini Proxy)
 │   ├── globals.css           # Punto de entrada de Tailwind v4 y reset CSS
@@ -24,6 +25,7 @@ Para garantizar la mantenibilidad absoluta, prevenir acoplamientos rígidos y as
 │   ├── LibraryModal.tsx      # Contenedor modal con pestañas (Overview, Sandbox, Docs)
 │   ├── PlaygroundAnimate.tsx # Módulo de físicas de resorte (Omni-Hooks)
 │   ├── PlaygroundFetch.tsx   # Simulador de resiliencia y exponencial backoff
+│   ├── PlaygroundFloatLayer.tsx # Laboratorio interactivo de ventanas flotantes multi-motor
 │   ├── PlaygroundGrid.tsx    # Herramienta interactiva de diseño CSS Grid
 │   └── PlaygroundState.tsx   # Consola inmutable de variables del State-Flow
 │
@@ -40,9 +42,15 @@ Para garantizar la mantenibilidad absoluta, prevenir acoplamientos rígidos y as
 │   └── libraries.ts          # DataSet de los repositorios y comandos de instalación
 │
 ├── librerias/                # Librerías de desarrollo de vanguardia y motores locales
-│   └── stridb/               # Stridb: IndexedDB con Cifrado AES-GCM
-│       ├── .gitignore        # Exclusión de archivos temporales e IDEs en la sub-librería
-│       └── ...               # Submódulos ultra-modulares de Stridb
+│   ├── stridb/               # Stridb: IndexedDB con Cifrado AES-GCM
+│   │   ├── .gitignore        # Exclusión de archivos temporales e IDEs en la sub-librería
+│   │   └── ...               # Submódulos ultra-modulares de Stridb
+│   └── FloatLayer/           # FloatLayer: Gestión ultra-modular de capas flotantes multi-motor
+│       ├── core/             # Estados reactivos centralizados, clamps y persistencia
+│       ├── pc/               # Motores lógicos de mosaico (tile) y cascada
+│       ├── mobile/           # Snapping magnético, fricción física e inercia celular
+│       ├── extensions/       # Consola de telemetría flotante y motor Picture-in-Picture nativo
+│       └── ...               # Archivos de configuración (jsr.json, tsconfig.json)
 │
 ├── .gitignore                # Reglas globales de exclusión para evitar la subida de basura
 └── metadata.json             # Permisos globales, nombre de app e identificación de API

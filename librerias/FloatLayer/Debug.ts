@@ -21,7 +21,7 @@ export interface DebugLog {
   category: string;
 }
 
-class FloatLayerDebugHub {
+export class FloatLayerDebugHub {
   private metricsLog: PerformanceMetric[] = [];
   private debugSubscribers: Set<(logs: DebugLog[]) => void> = new Set();
   private logs: DebugLog[] = [];
@@ -165,4 +165,4 @@ class FloatLayerDebugHub {
   }
 }
 
-export const FloatDebug = new FloatLayerDebugHub();
+export const FloatDebug: FloatLayerDebugHub = new FloatLayerDebugHub();

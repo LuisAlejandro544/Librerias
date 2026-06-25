@@ -8,7 +8,7 @@ export interface TelemetryConsoleProps {
   maxStoredLogs?: number;
 }
 
-export function TelemetryConsole({ className = '', maxStoredLogs = 100 }: TelemetryConsoleProps) {
+export function TelemetryConsole({ className = '', maxStoredLogs = 100 }: TelemetryConsoleProps): React.JSX.Element {
   const [logs, setLogs] = useState<DebugLog[]>([]);
   const [filterLevel, setFilterLevel] = useState<string>('all');
   const [filterCategory, setFilterCategory] = useState<string>('all');

@@ -10,8 +10,26 @@ export * from './Debug';
 export * from './extensions/TelemetryConsole';
 export * from './extensions/PipEngine';
 
+export interface FloatLayerHookValue {
+  instances: FloatInstance[];
+  allInstances: FloatInstance[];
+  focusedId: string | null;
+  layoutMode: 'pc' | 'mobile';
+  open: (id: string, title: string, content: React.ReactNode | ((instance: FloatInstance) => React.ReactNode), options?: FloatOptions) => void;
+  close: (id: string) => void;
+  destroy: (id: string) => void;
+  focus: (id: string) => void;
+  toggleMinimize: (id: string) => void;
+  toggleMaximize: (id: string) => void;
+  move: (id: string, dx: number, dy: number) => void;
+  resize: (id: string, dw: number, dh: number, handle?: 'r' | 'b' | 'se') => void;
+  stopDragging: (id: string) => void;
+  stopResizing: (id: string) => void;
+  getState: () => FloatLayerState;
+}
+
 // React Hook for seamless, reactive integration with Next.js/React apps
-export function useFloatLayer() {
+export function useFloatLayer(): FloatLayerHookValue {
   const [state, setState] = useState<FloatLayerState>(() => FloatManager.getState());
 
   useEffect(() => {

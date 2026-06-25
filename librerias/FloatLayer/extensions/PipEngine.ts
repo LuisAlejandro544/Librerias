@@ -13,7 +13,7 @@ export interface PipWindowOptions {
   onClose?: () => void;
 }
 
-class FloatPipEngine {
+export class FloatPipEngine {
   private activePipWindow: any = null;
 
   // Verifica si el navegador actual soporta la API nativa de Document Picture-in-Picture
@@ -137,4 +137,4 @@ class FloatPipEngine {
   }
 }
 
-export const FloatPip = new FloatPipEngine();
+export const FloatPip: FloatPipEngine = new FloatPipEngine();

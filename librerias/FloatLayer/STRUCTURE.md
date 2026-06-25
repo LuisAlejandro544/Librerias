@@ -62,6 +62,13 @@ Este documento detalla la estructura modular de la librería **FloatLayer** bajo
   - **Performance Tracker**: Reporta drops de frames o retrasos si el cálculo del arrastre excede el estándar de 16ms (60fps).
   - **Memory/Durable Diagnostics**: Reporta la huella de memoria consumida por las configuraciones guardadas en `localStorage`.
 
+### 5. `/extensions/` (Extensiones de Telemetría y Picture-in-Picture)
+- **`TelemetryConsole.tsx`**: Componente visual de React de grado profesional que permite renderizar una terminal interactiva de logs.
+  - Ofrece filtros de nivel de logs (Exitoso, Información, Advertencia, Error).
+  - Permite filtrados dinámicos por categorías de emisión.
+  - Incorpora una línea de comandos (Shell interactivo) con evaluación segura de código JavaScript.
+- **`PipEngine.ts`**: Implementa la API experimental HTML5 `documentPictureInPicture` para desacoplar componentes y renderizarlos en ventanas nativas de sistema operativo que flotan por encima de todo el escritorio corporativo. Sincroniza automáticamente los estilos de Tailwind para mantener la fidelidad visual.
+
 ---
 
 ## 🚀 Filosofía de Diseño: Aislamiento Completo
