@@ -1,0 +1,20 @@
+name: Publish FloatLayer
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'librerias/FloatLayer/**'
+      - '.github/workflows/publish-floatlayer.yml'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+      - name: Publish FloatLayer package
+        working-directory: ./librerias/FloatLayer
+        run: npx jsr publish

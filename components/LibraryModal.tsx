@@ -12,6 +12,7 @@ import PlaygroundAnimate from './PlaygroundAnimate';
 import PlaygroundKotlite from './PlaygroundKotlite';
 import PlaygroundSync from './PlaygroundSync';
 import PlaygroundStridb from './PlaygroundStridb';
+import PlaygroundFloatLayer from './PlaygroundFloatLayer';
 
 interface LibraryModalProps {
   library: Library;
@@ -65,6 +66,8 @@ export default function LibraryModal({ library, onClose }: LibraryModalProps) {
         return <PlaygroundSync />;
       case 'stridb':
         return <PlaygroundStridb />;
+      case 'floatlayer':
+        return <PlaygroundFloatLayer />;
       default:
         return (
           <div className="text-center py-12 text-[#71717A] text-xs">

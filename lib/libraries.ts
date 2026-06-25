@@ -13,10 +13,56 @@ export interface Library {
   features: string[];
   installation: string;
   usageCode: string;
-  playgroundType: 'grid' | 'state' | 'fetch' | 'animate' | 'kotlite' | 'sync' | 'stridb';
+  playgroundType: 'grid' | 'state' | 'fetch' | 'animate' | 'kotlite' | 'sync' | 'stridb' | 'floatlayer';
 }
 
 export const libraries: Library[] = [
+  {
+    id: "floatlayer",
+    name: "floatlayer",
+    tagline: "Librería ultra-modular y reactiva para capas y ventanas flotantes con motores optimizados para PC y Móviles.",
+    description: "FloatLayer ofrece herramientas premium para crear interfaces de ventanas flotantes fluidas, simulaciones Picture-in-Picture y burbujas interactivas en primer plano. Cuenta con alineación magnética (Snapping), memoria persistente de coordenadas en localStorage, y un hook React seguro para renderizado SSR en Next.js bajo la licencia comercial Apache 2.0.",
+    category: "animation",
+    stars: 20,
+    downloads: "Novedad 🔥",
+    size: "2.8 KB",
+    version: "v1.0.0",
+    githubUrl: "https://github.com/LuisAlejandro544/Librerias",
+    npmCommand: "npx jsr add @alejandro/floatlayer",
+    features: [
+      "Ultra Modularidad: Carpetas exclusivas para optimizar la lógica en móviles y PC de forma segura",
+      "Magnética Inteligente: Suave snapping magnético al aproximar ventanas a las esquinas o bordes de pantalla",
+      "Chat Bubble Móvil: Arrastre táctil de burbujas flotantes colapsables con inercia física",
+      "Escritorio de Ventanas: Soporte para maximizar, minimizar, redimensionar y arrastrar con foco dinámico",
+      "Persistencia de Layout: Memoria persistente automática de coordenadas y tamaños en localStorage",
+      "SSR-Safe & Hook useFloatLayer: Integración instantánea con React/Next.js sin desajustes visuales"
+    ],
+    installation: `# Instalar el paquete oficial desde el registro JSR
+npx jsr add @alejandro/floatlayer
+
+# O usando Deno
+deno add jsr:@alejandro/floatlayer
+
+# O Bun
+bunx jsr add @alejandro/floatlayer`,
+    usageCode: `import { useFloatLayer } from './librerias/FloatLayer';
+
+// 1. Vincula el gestor reactivo en tu componente
+const { open, instances } = useFloatLayer();
+
+// 2. Dispara una ventana flotante con opciones avanzadas
+open("mi-video-pip", "Reproductor PiP flotante", (inst) => (
+  <div className="p-4 bg-black h-full flex flex-col justify-between">
+    <video src="/trailer.mp4" controls className="rounded" />
+  </div>
+), {
+  initialWidth: 320,
+  initialHeight: 180,
+  edgeSnapping: true,
+  persistentId: "mi_video_persistente" // Recuerda su posición al recargar!
+});`,
+    playgroundType: "floatlayer"
+  },
   {
     id: "kotlite-db",
     name: "kotlite-db",

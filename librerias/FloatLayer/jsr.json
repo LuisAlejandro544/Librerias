@@ -1,0 +1,19 @@
+{
+  "name": "@alejandro/floatlayer",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "exports": "./mod.ts",
+  "imports": {
+    "react": "npm:react@^19.2.1"
+  },
+  "publish": {
+    "include": [
+      "README.md",
+      "LICENSE",
+      "STRUCTURE.md",
+      "TUTORIAL.md",
+      "ROADMAP.md",
+      "**/*.ts"
+    ]
+  }
+}
