@@ -14,6 +14,7 @@ Este documento describe la arquitectura modular de **Stridb**. Siguiendo el enfo
 ├── Debug.ts              # Subsistema de registro estilizado para consolas y terminales del navegador.
 ├── Hooks.ts              # Hook de React/Next.js useStridbQuery para vinculación reactiva en tiempo real.
 ├── InactivityManager.ts  # Temporizador inteligente de actividad para autodestrucción por inactividad.
+├── Install.md            # Guía detallada de instalación para múltiples gestores de paquetes.
 ├── KeyVault.ts           # Bóveda cifrada segura para almacenar API Keys de proveedores de LLMs.
 ├── LICENSE               # Copia fiel de la Licencia de Software Apache 2.0.
 ├── Query.ts              # Motor de consultas fluido (Chaining API) con ordenación y paginación.

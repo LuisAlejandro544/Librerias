@@ -21,14 +21,22 @@ Inspirado en la simplicidad sintáctica de SQLite y la rigidez de TypeScript, St
 
 ---
 
-## 🚀 Instalación Rápida
+## 🚀 Instalación Rápida (JSR)
 
-Stridb está diseñado bajo los estándares modernos de ESM y TypeScript:
+Stridb está diseñado bajo los estándares modernos de ESM y TypeScript y se distribuye a través de **JSR**:
 
 ```bash
-# Instalación local desde tu repositorio corporativo o repositorio JSR
-npx jsr add @librerias/stridb
+# Node.js (npm)
+npx jsr add @alejandro/stridb
+
+# Deno
+deno add jsr:@alejandro/stridb
+
+# Bun
+bunx jsr add @alejandro/stridb
 ```
+
+> 📖 Para una guía de instalación completa y detallada usando otros gestores como **pnpm**, **Yarn**, **vlt** e importaciones directas, por favor consulta la guía detallada: [**Guía de Instalación (Install.md)**](./Install.md).
 
 ---
 

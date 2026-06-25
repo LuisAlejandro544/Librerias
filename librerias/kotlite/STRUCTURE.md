@@ -21,6 +21,7 @@ A continuación, se detalla el rol exacto de cada archivo que compone esta carpe
 ├── Debug.ts              # [Diagnóstico] Suite de diagnóstico interactivo en consola con logs detallados e inspección visual
 ├── Migration.ts          # [Migración] Adaptadores fieles y constructores DSL para migrar bases de datos Android SQLite/Room
 ├── index.ts              # [Barril de Exportación] Entrada e importaciones seguras para TypeScript
+├── Install.md            # [Guía de Instalación] Comandos exactos para instalar Kotlite con múltiples gestores desde JSR
 ├── README.md             # [Manual General] Guía de inicio rápido y hook interactivo para React
 ├── STRUCTURE.md          # [Este Archivo] Mapa de arquitectura detallado con responsabilidades modulares
 ├── SETUP.md              # [Guía de Configuración] Pasos interactivos para instalar en Next.js
