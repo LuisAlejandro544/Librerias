@@ -44,12 +44,15 @@ El código se encuentra organizado de manera modular bajo la filosofía de **Des
 
 ## ⚙️ Instalación
 
-Puedes agregar **FloatLayer** a tu aplicación mediante registro **JSR** o importándolo directamente de forma offline:
+Puedes agregar **FloatLayer** a tu aplicación mediante registro **JSR** para Deno, Node (npm, pnpm, yarn, vlt) y Bun de manera rápida:
 
 ```bash
-# Instalación recomendada vía JSR
+# Instalación recomendada para proyectos Node.js
 npx jsr add @alejandro/floatlayer
 ```
+
+Para ver la guía de instalación optimizada para otros entornos de ejecución, consulta el archivo de soporte adjunto:
+👉 **[Guía Completa de Instalación en JSR (Install.md)](./Install.md)**
 
 ---
 

@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
       "TUTORIAL.md",
       "CONTRIBUTING.md",
       "MODIFICATIONS_AND_LIMITATIONS.md",
+      "Install.md",
       "LICENSE"
     ];
 

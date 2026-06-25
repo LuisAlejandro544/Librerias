@@ -28,6 +28,7 @@ try {
     "TUTORIAL.md",
     "CONTRIBUTING.md",
     "MODIFICATIONS_AND_LIMITATIONS.md",
+    "Install.md",
     "LICENSE"
   ];
 
